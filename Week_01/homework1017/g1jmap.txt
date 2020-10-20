@@ -1,0 +1,52 @@
+ []$ sudo jmap -heap 161893
+Attaching to process ID 161893, please wait...
+Debugger attached successfully.
+Server compiler detected.
+JVM version is 25.202-b08
+
+using thread-local object allocation.
+Garbage-First (G1) GC with 8 thread(s) // 并发8线程 8核？
+
+Heap Configuration:
+   MinHeapFreeRatio         = 40 // JVM最小空闲比 默认40  -XX:MinHeapFreeRatio
+   MaxHeapFreeRatio         = 70 // JVM最大空闲比 默认70  -XX:MaxHeapFreeRatio
+   MaxHeapSize              = 4116709376 (3926.0MB) // jvm堆最大值   操作系统16G内存的1/4
+   NewSize                  = 1363144 (1.2999954223632812MB) // jvm堆年轻代初始大小 
+   MaxNewSize               = 2469396480 (2355.0MB) // jvm堆年轻代最大值 3926*0.6  堆最大值的60% 
+   OldSize                  = 5452592 (5.1999969482421875MB) // jvm堆老年代初始大小 
+   NewRatio                 = 2 // 年轻代和老年代大小比例 1:2  
+   SurvivorRatio            = 8 //  年轻代中Eden和Survivor比例 
+   MetaspaceSize            = 21807104 (20.796875MB) 
+   CompressedClassSpaceSize = 1073741824 (1024.0MB)
+   MaxMetaspaceSize         = 17592186044415 MB
+   G1HeapRegionSize         = 1048576 (1.0MB) // 每个region大小  3926m/ 3926个
+
+Heap Usage:
+G1 Heap:
+   regions  = 3926  
+   capacity = 4116709376 (3926.0MB)
+   used     = 153490424 (146.37987518310547MB)
+   free     = 3963218952 (3779.6201248168945MB)
+   3.728473641953782% used
+G1 Young Generation:
+Eden Space:
+   regions  = 129
+   capacity = 146800640 (140.0MB)
+   used     = 135266304 (129.0MB)
+   free     = 11534336 (11.0MB)
+   92.14285714285714% used
+Survivor Space:
+   regions  = 15
+   capacity = 15728640 (15.0MB)
+   used     = 15728640 (15.0MB)
+   free     = 0 (0.0MB)
+   100.0% used
+G1 Old Generation:
+   regions  = 3
+   capacity = 95420416 (91.0MB)
+   used     = 1446904 (1.3798751831054688MB)
+   free     = 93973512 (89.62012481689453MB)
+   1.5163463550609546% used
+
+16487 interned Strings occupying 1449696 bytes.
+

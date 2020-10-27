@@ -1,0 +1,53 @@
+1. 串行GC
+java -XX:+UseSerialGC -Xms512m -Xmx512m -XX:+PrintGCDetails -XX:+PrintGCDateStamps GCLogAnalysis
+按此测试时，共发生3此FullGC用时40ms46ms39ms， 
+将堆内存调小为128m，发生了17此FullGC， 并且导致了内存溢出。
+第一次GC时，只有young区有对象。他是单线程GC，效率不高，暂停时间较长。
+
+2.并行GC
+java -Xms512m -Xmx512m -XX:+PrintGCDetails -XX:+PrintGCDateStamps GCLogAnalysis
+每次发生FullGC时，young区都置于0，选取某一次FullGC的old区变化[ParOldGen: 313064K->233588K(349696K)]，
+GC前Old区占89.5%，GC后占66.8%。
+将堆内存调小为128m，连续发生15次FullGC，前几次young区还可以置于0，old区也在减少，到最后young区与old区都不能继续清空，发生了OOM。
+
+3.CMS GC
+java -XX:+UseConcMarkSweepGC -Xms512m -Xmx512m -XX:+PrintGCDetails -XX:+PrintGCDateStamps GCLogAnalysis
+
+[GC (CMS Initial Mark) [1 CMS-initial-mark: 199397K(349568K)] 217557K(506816K), 0.0002021 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+这个阶段为初始标记阶段，有可能发生STW，用时很短
+[CMS-concurrent-mark-start]
+[CMS-concurrent-mark: 0.001/0.001 secs] [Times: user=0.01 sys=0.00, real=0.00 secs]
+这个阶段为并发标记阶段
+[CMS-concurrent-preclean-start]
+[CMS-concurrent-preclean: 0.001/0.001 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+这个阶段为并发预清理阶段
+[CMS-concurrent-abortable-preclean-start]
+[CMS-concurrent-abortable-preclean: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+[GC (CMS Final Remark) [YG occupancy: 11406 K (157248 K)]2020-10-27T20:39:00.212-0800: [Rescan (parallel) , 0.0003508 secs]2020-10-27T20:39:00.212-0800: [weak refs processing, 0.0000143 secs]2020-10-27T20:39:00.212-0800: [class unloading, 0.0002552 secs]2020-10-27T20:39:00.212-0800: [scrub symbol table, 0.0003764 secs]2020-10-27T20:39:00.213-0800: [scrub string table, 0.0002313 secs][1 CMS-remark: 341552K(349568K)] 352958K(506816K), 0.0012998 secs] [Times: user=0.01 sys=0.00, real=0.00 secs]
+这个阶段为最终标记阶段，有可能发生STW
+[CMS-concurrent-sweep-start]
+[CMS-concurrent-sweep: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+这个阶段为并发清除阶段
+[CMS-concurrent-reset-start]
+[CMS-concurrent-reset: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+这个阶段为并发重置阶段
+
+4. G1 GC
+java -XX:+UseG1GC -Xms512m -Xmx512m -XX:+PrintGC -XX:+PrintGCDateStamps GCLogAnalysis	
+[GC pause (G1 Evacuation Pause) (young) 383M->360M(512M), 0.0018149 secs]
+[GC pause (G1 Evacuation Pause) (mixed) 388M->361M(512M), 0.0040938 secs]
+年轻代转移暂停阶段
+[GC pause (G1 Humongous Allocation) (young) (initial-mark) 367M->362M(512M), 0.0014114 secs]
+并发标记-初始标记
+[GC concurrent-root-region-scan-start]
+[GC concurrent-root-region-scan-end, 0.0000742 secs]
+并发标记-Root区扫描
+[GC concurrent-mark-start]
+[GC concurrent-mark-end, 0.0009393 secs]
+并发标记-并发标记
+[GC remark, 0.0012373 secs]
+并发标记-再次标记
+[GC cleanup 369M->369M(512M), 0.0007321 secs]
+并发标记-清理
+
+当调整为4g时，没有发生GC.

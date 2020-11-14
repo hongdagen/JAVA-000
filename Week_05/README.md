@@ -1,1 +1,2 @@
-学习笔记
+学习笔记  
+写代码实现Spring Bean的装配，方式越多越好(XML、Annotation都可以),提 交到Github。

@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+2   com.hyhy.springboot.homework.starter.AutoConfigurationStudent

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyhy.mysql.repository.OrderEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.hyhy.mysql.entity.OrderEntity" >
+    <id column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="amount" property="amount" jdbcType="BIGINT" />
+    <result column="order_generated_time" property="orderGeneratedTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="product_ids" property="productIds" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, user_id, amount, order_generated_time, status, product_ids
+  </sql>
+  <insert id="insert" parameterType="com.hyhy.mysql.entity.OrderEntity" >
+    insert into t_order (order_id, user_id, amount, 
+      order_generated_time, status, product_ids
+      )
+    values (#{orderId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{amount,jdbcType=BIGINT}, 
+      #{orderGeneratedTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{productIds,jdbcType=BIGINT}
+      )
+  </insert>
+
+</mapper>

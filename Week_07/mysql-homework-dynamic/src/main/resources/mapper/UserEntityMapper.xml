@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyhy.mysql.repository.UserEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.hyhy.mysql.entity.UserEntity" >
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="INTEGER" />
+    <result column="pwd_hash" property="pwdHash" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="reg_time" property="regTime" jdbcType="TIMESTAMP" />
+    <result column="addrs_id" property="addrsId" jdbcType="BIGINT" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    user_id, name, mobile, pwd_hash, email, reg_time, addrs_id
+  </sql>
+
+  <insert id="insert" parameterType="com.hyhy.mysql.entity.UserEntity" >
+    insert into t_user (user_id, name, mobile, 
+      pwd_hash, email, reg_time, 
+      addrs_id)
+    values (#{userId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{mobile,jdbcType=INTEGER}, 
+      #{pwdHash,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{regTime,jdbcType=TIMESTAMP}, 
+      #{addrsId,jdbcType=BIGINT})
+  </insert>
+
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyhy.mysql.repository.ProductEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.hyhy.mysql.entity.ProductEntity" >
+    <id column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="product_price" property="productPrice" jdbcType="BIGINT" />
+    <result column="product_images" property="productImages" jdbcType="VARCHAR" />
+    <result column="product_info" property="productInfo" jdbcType="VARCHAR" />
+    <result column="product_title" property="productTitle" jdbcType="VARCHAR" />
+    <result column="product_del" property="productDel" jdbcType="INTEGER" />
+    <result column="product_shelf" property="productShelf" jdbcType="INTEGER" />
+    <result column="product_shelf_time" property="productShelfTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    product_id, product_price, product_images, product_info, product_title, product_del, 
+    product_shelf, product_shelf_time
+  </sql>
+  <insert id="insert" parameterType="com.hyhy.mysql.entity.ProductEntity" >
+    insert into t_product (product_id, product_price, product_images, 
+      product_info, product_title, product_del, 
+      product_shelf, product_shelf_time)
+    values (#{productId,jdbcType=BIGINT}, #{productPrice,jdbcType=BIGINT}, #{productImages,jdbcType=VARCHAR}, 
+      #{productInfo,jdbcType=VARCHAR}, #{productTitle,jdbcType=VARCHAR}, #{productDel,jdbcType=INTEGER}, 
+      #{productShelf,jdbcType=INTEGER}, #{productShelfTime,jdbcType=TIMESTAMP})
+  </insert>
+
+</mapper>

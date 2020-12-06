@@ -1,0 +1,52 @@
+schemaName: orderdb
+#
+dataSourceCommon:
+  username: root
+  password: root
+  connectionTimeoutMilliseconds: 30000
+  idleTimeoutMilliseconds: 60000
+  maxLifetimeMilliseconds: 1800000
+  maxPoolSize: 50
+  minPoolSize: 1
+  maintenanceIntervalMilliseconds: 30000
+#
+dataSources:
+  db_proxy00:
+    url: jdbc:mysql://127.0.0.1:3306/db_proxy00?serverTimezone=UTC&useSSL=false
+  db_proxy01:
+    url: jdbc:mysql://127.0.0.1:3306/db_proxy01?serverTimezone=UTC&useSSL=false
+#
+rules:
+  - !SHARDING
+    tables:
+      ordertable:
+        actualDataNodes: db_proxy0${0..1}.t_order_0${0..15}
+        tableStrategy:
+          standard:
+            shardingColumn: id
+            shardingAlgorithmName: test_inline
+        keyGenerateStrategy:
+            column: id
+            keyGeneratorName: snowflake
+    defaultDatabaseStrategy:
+      standard:
+        shardingColumn: id
+        shardingAlgorithmName: database_inline
+    defaultTableStrategy:
+      none:
+
+    shardingAlgorithms:
+      database_inline:
+        type: INLINE
+        props:
+          algorithm-expression: db_proxy0${id % 2}
+      test_inline:
+        type: INLINE
+        props:
+          algorithm-expression: t_order_0${id % 16}
+          allow-range-query-with-inline-sharding: true
+    keyGenerators:
+      snowflake:
+        type: SNOWFLAKE
+        props:
+          worker-id: 123

@@ -35,6 +35,7 @@ public class Handler {
             ps.setString(5, user.getEmail());
             ps.setDate(6, new Date(user.getRegTime().getTime()));
             ps.setLong(7, user.getAddrsId());
+            ps.executeUpdate();
         }
         return user.getId();
     }
@@ -47,6 +48,7 @@ public class Handler {
             ps.setLong(2,userId);
             ps.setString(3, addr.getAddr());
             ps.setDate(4, null);
+            ps.executeUpdate();
         }
     }
 }

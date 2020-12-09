@@ -2,6 +2,7 @@ package com.hyhy.distributed_transaction;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.transaction.jta.JtaAutoConfiguration;
 
 /**
@@ -9,7 +10,7 @@ import org.springframework.boot.autoconfigure.transaction.jta.JtaAutoConfigurati
  * @Date: 2020/12/9 9:22
  */
 
-@SpringBootApplication(exclude = JtaAutoConfiguration.class)
+@SpringBootApplication(exclude = {JtaAutoConfiguration.class, DataSourceAutoConfiguration.class})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

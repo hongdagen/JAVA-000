@@ -33,7 +33,7 @@ public class RpcfxInvoker {
             response.setResult(JSON.toJSONString(result, SerializerFeature.WriteClassName));
             response.setStatus(true);
             return response;
-        } catch (RpcfxException e) {
+        } catch (RpcfxException | IllegalAccessException | InvocationTargetException e) {
 
             // 3.Xstream
 

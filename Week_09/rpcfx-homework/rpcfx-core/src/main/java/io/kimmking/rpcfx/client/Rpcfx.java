@@ -2,30 +2,33 @@ package io.kimmking.rpcfx.client;
 
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.ParserConfig;
 import io.kimmking.rpcfx.api.RpcfxRequest;
 import io.kimmking.rpcfx.api.RpcfxResponse;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
-public final class Rpcfx {
 
-    static {
-        ParserConfig.getGlobalInstance().addAccept("io.kimmking");
-    }
+public class Rpcfx {
 
-    public static <T> T create(final Class<T> serviceClass, final String url) {
+//    static {
+//        ParserConfig.getGlobalInstance().addAccept("io.kimmking");
+//    }
+
+    public <T> T create(final Class<T> serviceClass, final String url) {
 
         // 0. 替换动态代理 -> AOP
-        return (T) Proxy.newProxyInstance(Rpcfx.class.getClassLoader(), new Class[]{serviceClass}, new RpcfxInvocationHandler(serviceClass, url));
-
+       // return (T) Proxy.newProxyInstance(Rpcfx.class.getClassLoader(), new Class[]{serviceClass}, new RpcfxInvocationHandler(serviceClass, url));
+        System.out.println(1);
+        System.out.println(2);
+        System.out.println(3);
+        return (T) serviceClass.getClass();
     }
 
     public static class RpcfxInvocationHandler implements InvocationHandler {

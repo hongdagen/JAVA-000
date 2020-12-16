@@ -29,16 +29,15 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         URI uri = new URI("/");
         String data = JSON.toJSONString(req);
-        ByteBuf bbuf = Unpooled.copiedBuffer(data, StandardCharsets.UTF_8);
         FullHttpRequest request = new DefaultFullHttpRequest(
-                HttpVersion.HTTP_1_1, HttpMethod.POST, uri.toASCIIString(),bbuf);
+                HttpVersion.HTTP_1_1, HttpMethod.POST, uri.toASCIIString(), Unpooled.wrappedBuffer(data.getBytes(StandardCharsets.UTF_8)));
 
 
-        request.headers().set("Host", "127.0.0.1:8080");
+        request.headers().set("Host", "127.0.0.1");
         request.headers().set("Connection", HttpHeaderValues.KEEP_ALIVE);
-        request.headers().set("Content-Type", "application/json");
+        request.headers().set("Content-Type", HttpHeaderValues.APPLICATION_JSON);
 
-        request.headers().set("Content-Length", bbuf.readableBytes());
+        request.headers().set("Content-Length", request.content().readableBytes());
 
         ctx.writeAndFlush(request);
     }

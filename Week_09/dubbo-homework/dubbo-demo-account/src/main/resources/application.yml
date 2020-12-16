@@ -1,0 +1,35 @@
+server:
+  port: 8184
+spring:
+  datasource:
+    driver-class-name:  com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/geek_hyhy_1?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password:
+  application:
+    name: dubbo-demo-account
+
+
+mybatis:
+  type-aliases-package: io.kimmking.dubbo.demo.account.entity
+
+logging:
+  level:
+    root: error
+    org.springframework.web: info
+    org.apache.ibatis: debug
+    org.dromara.hmily.demo.bonuspoint: debug
+    org.dromara.hmily.demo.lottery: debug
+    org.dromara.hmily.demo: debug
+  file:
+    path: "./logs"
+dubbo:
+  scan:
+    base-packages: io.kimmking.dubbo.demo.account
+  protocol:
+    name: dubbo
+    port: 54321
+  registry:
+    address: zookeeper://localhost:2181
+  metadata-report:
+    address: zookeeper://localhost:2181

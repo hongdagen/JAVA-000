@@ -1,0 +1,17 @@
+server:
+  port: 28888
+spring:
+  application:
+    name: springboot-kafka-homework
+  kafka:
+    bootstrap-servers: 192.168.0.100:9093, 192.168.0.100:9094, 192.168.0.100:9095
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: test-consumer-group
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      auto-commit-interval: 100
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer

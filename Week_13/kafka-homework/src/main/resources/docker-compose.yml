@@ -1,0 +1,97 @@
+version: '3.7'
+
+networks:
+  kafka_default:
+    external: true
+
+services:
+  zookeeper:
+    image: zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka1:
+    image: wurstmeister/kafka
+    restart: unless-stopped
+    container_name: kafka1
+    ports:
+      - "9093:9092"
+    external_links:
+      - zoo1
+      - zoo2
+      - zoo3
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.0.100               
+      KAFKA_ADVERTISED_PORT: 9093                                
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.100:9093   
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+    volumes:
+      - "/Users/hyhy/docker/kafka/sock/k1/docker.sock:/var/run/docker.sock"
+      - "/Users/hyhy/docker/kafka/datas/k1:/kafka"
+    networks:
+      - kafka_default
+
+
+  kafka2:
+    image: wurstmeister/kafka
+    restart: unless-stopped
+    container_name: kafka2
+    ports:
+      - "9094:9092"
+    external_links:
+      - zoo1
+      - zoo2
+      - zoo3
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.0.100                 
+      KAFKA_ADVERTISED_PORT: 9094                               
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.100:9094
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+    volumes:
+      - "/Users/hyhy/docker/kafka/sock/k2/docker.sock:/var/run/docker.sock"
+      - "/Users/hyhy/docker/kafka/datas/k2:/kafka"
+    networks:
+      - kafka_default
+
+  kafka3:
+    image: wurstmeister/kafka
+    restart: unless-stopped
+    container_name: kafka3
+    ports:
+      - "9095:9092"
+    external_links:
+      - zoo1
+      - zoo2
+      - zoo3
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.0.100               
+      KAFKA_ADVERTISED_PORT: 9095                              
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.1000:9095
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+    volumes:
+      - "/Users/hyhy/docker/kafka/sock/k3/docker.sock:/var/run/docker.sock"
+      - "/Users/hyhy/docker/kafka/datas/k3:/kafka"
+    networks:
+      - kafka_default
+
+  kafka-manager:
+    image: sheepkiller/kafka-manager:latest
+    restart: unless-stopped
+    container_name: kafka-manager
+    hostname: kafka-manager
+    ports:
+      - "9000:9000"
+    links:          
+      - kafka1
+      - kafka2
+      - kafka3
+    external_links:
+      - zookeeper
+    environment:
+      ZK_HOSTS: zookeeper:2181
+      TZ: CST-8
+    networks:
+      - kafka_default

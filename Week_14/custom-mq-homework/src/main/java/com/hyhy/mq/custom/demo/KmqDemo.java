@@ -6,7 +6,8 @@ import com.hyhy.mq.custom.core.KmqMessage;
 import com.hyhy.mq.custom.core.KmqProducer;
 import lombok.SneakyThrows;
 
-import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 /**
  * @Author: hyhy
@@ -26,22 +27,20 @@ public class KmqDemo {
         KmqConsumer consumer2 = broker.createConsumer(topic, "B", false);
 
         new Thread(() -> {
-            for (int j = 0; j < 100; j++) {
+            while(true) {
                 KmqMessage<String> message1 = consumer1.poll(topic, 100);
             }
         }).start();
 
         new Thread(()->{
-            for (int i = 0; i < 100; i++) {
+            while(true) {
                 KmqMessage<String> message2 = consumer2.poll(topic, 100);
             }
         }).start();
 
 
         KmqProducer producer = broker.createProducer();
-        for (int i = 0; i < 1000; i++) {
-            producer.send(topic, new KmqMessage(null, String.valueOf(i)));
-        }
+        IntStream.rangeClosed(0,999).boxed().forEach(i -> producer.send(topic, new KmqMessage(null, String.valueOf(TimeUnit.MILLISECONDS))));
         Thread.sleep(100000);
     }
 }
